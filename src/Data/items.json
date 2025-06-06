@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "Porsche", "color": "#d4af37", "year": "1931" },
+  { "id": 2, "name": "Ferrari", "color": "#ff2800", "year": "1939" },
+  { "id": 3, "name": "McLaren", "color": "#ff7f00", "year": "1963" },
+  { "id": 4, "name": "Bugatti", "color": "#000000", "year": "1909" },
+  { "id": 5, "name": "Lamborghini", "color": "#d8a016", "year": "1963" }
+
+]
