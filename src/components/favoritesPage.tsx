@@ -1,4 +1,3 @@
-// src/pages/FavoritesPage.tsx
 import React from 'react';
 import { Grid, Typography, Box } from '@mui/material';
 import { useFavorites } from '../hooks/useFavorites';
@@ -6,7 +5,7 @@ import type { Movie } from '../data/Movie';
 import MovieCard from '../components/MovieCard';
 
 interface Props {
-  allMovies: Movie[]; // Pass this in from App or parent
+  allMovies: Movie[]; 
 }
 
 const FavoritesPage: React.FC<Props> = ({ allMovies }) => {

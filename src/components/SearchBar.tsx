@@ -1,10 +1,10 @@
 import React from 'react';
 import { TextField, Button, Box } from '@mui/material';
-import '../i18n'; // Import i18n for translations
+import '../i18n'; 
 import { useTranslation } from 'react-i18next';
 
 
-interface Props { // Props for SearchBar component
+interface Props { 
   query: string;
   setQuery: (val: string) => void;
   onSearch: () => void;
