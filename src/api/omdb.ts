@@ -19,3 +19,11 @@ export const getMovies = async (query: string, page: number = 1): Promise<{
     throw new Error("No movies found");
   }
 };
+
+export const getMovieById = async (id: string) => {
+  const API_KEY = '857f82a9';
+  const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${id}&plot=full`);
+  const data = await response.json();
+  return data;
+};
+

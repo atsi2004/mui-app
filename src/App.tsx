@@ -1,107 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Grid, Card, CardContent, CardMedia, Skeleton, Pagination } from '@mui/material';
-import SearchBar from './components/SearchBar';
-import type { Movie } from './data/Movie';
-import { getMovies } from './api/omdb';
-import MovieGrid from './components/MovieGrid';
-import defaultMovies from './data/defaultMovies';
-
-
-
-
+import React, { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import SearchPage from './pages/SearchPage';
+import MovieDetails from './pages/MovieDetails';
+import './i18n';
+import { useTranslation } from 'react-i18next';
+import LanguageSelector from './components/LanguageSelector';
+import ThemeToggle from './components/ThemeToggle';
+import { Box, CssBaseline, ThemeProvider } from '@mui/material';
+import { getTheme } from './theme';
 
 
 const App: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
-  const totalPages = Math.ceil(totalResults / 10);  
-  
+  const { i18n } = useTranslation();
+  const [ready, setReady] = useState(false);
 
-  const loadMovies = async (query: string, pages: number = 1) => {
-    setLoading(true);
-    try {
-      const { movies: fetchedMovies, totalResults } = await getMovies(query, pages);
-      setMovies(fetchedMovies);
-      setTotalResults(totalResults);
-    } catch (error) {
-      console.error("❌ Error loading movies:", error);
-      alert("❌ Could not load movies, try again later.");
-      setMovies([]);
-      setTotalResults(0);
-    } finally {
-      setLoading(false);
-    }
+  const [mode, setMode] = useState<'light' | 'dark'>(
+    (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
+  );
+
+  const theme = getTheme(mode);
+
+  const toggleTheme = () => {
+    const newMode = mode === 'light' ? 'dark' : 'light';
+    setMode(newMode);
+    localStorage.setItem('theme', newMode);
   };
-
-
-  const handleSearch = async () => {
-    setPage(1);
-    await loadMovies(query, 1);
-  };
-
-
-  
 
   useEffect(() => {
-    if (query) loadMovies(query, page);
-  }, [page]);
+    i18n.changeLanguage(navigator.language).then(() => {
+      setReady(true);
+    });
+  }, [i18n]);
 
-const filtered = defaultMovies.filter((movie) =>
-    movie.Title.toLowerCase().includes(query.toLowerCase())
-  );
-  const displayMovies = movies.length > 0 ? movies : filtered;
+  if (!ready) return null;
 
   return (
-    <Container sx={{ py: 5 }}>
-      <Box textAlign="center" mb={4}>
-        <Typography variant="h2" gutterBottom>
-          Movie Search
-        </Typography>
-      </Box>
-
-      <SearchBar query={query} setQuery={setQuery} onSearch={handleSearch} />
-
-      <MovieGrid movies={displayMovies} loading={loading} />
-
-      {movies.length > 0 && totalPages > 1 && (
-        <Box display="flex" justifyContent="center" mt={5}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(_, value) => setPage(value)}
-            color="primary"
-          />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ position: 'relative', minHeight: '100vh' }}>
+        {/* Top-left controls: Language Selector + Theme Toggle */}
+        <Box sx={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 2, zIndex: 1000 }}>
+          <LanguageSelector />
+          <ThemeToggle mode={mode} toggleTheme={toggleTheme} />
         </Box>
-      )}
-    </Container>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+        </Routes>
+      </Box>
+    </ThemeProvider>
   );
 };
 
 export default App;
-
-/*
-src/
-├── components/            # Reusable UI components
-│   ├── MovieCard.tsx
-│   ├── MovieGrid.tsx
-│   └── SearchBar.tsx
-│
-├── pages/                 # Page-level components
-│   └── App.tsx            # Main page or route
-│
-├── api/                   # API handlers & network utilities
-│   └── omdb.ts            # Your `getMovies()` function
-│
-├── types/                 # TypeScript types/interfaces
-│   └── Movie.ts           # Movie type
-│
-├── hooks/                 # Custom hooks (if needed later)
-│   └── useMovies.ts       # e.g., manage movie fetch logic
-│
-├── assets/                # Static assets (images, icons, etc.)
-│
-└── index.tsx              # Entry point
-*/
