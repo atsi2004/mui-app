@@ -3,11 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Typography, Container, Chip, CircularProgress, Button, IconButton } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import LaunchIcon from '@mui/icons-material/Launch';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShowFavorites from '../components/ShowFavorites';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import type { Movie } from '../data/Movie';
 import { useFavorites } from '../context/FavoritesContext';
 
 interface MovieDetailsData { // Details that will be shown
