@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from 'react';
+// src/App.tsx
+import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { CssBaseline, ThemeProvider, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
 import MovieDetails from './pages/MovieDetails';
-import './i18n';
-import { useTranslation } from 'react-i18next';
-import LanguageSelector from './components/LanguageSelector';
-import ThemeToggle from './components/ThemeToggle';
-import { Box, CssBaseline, ThemeProvider } from '@mui/material';
-import { getTheme } from './theme';
+import FavoritesPage from './pages/FavoritesPage';
+import defaultMovies from './data/defaultMovies';
 
+import ThemeToggle from './components/ThemeToggle';
+import LanguageSelector from './components/LanguageSelector';
+import ShowFavorites from './components/ShowFavorites';
+import { getTheme } from './theme';
+import { FavoritesProvider } from './context/FavoritesContext';
+import BackButton from './components/BackButton'; 
+import type { Movie } from './data/Movie';
 
 const App: React.FC = () => {
   const { i18n } = useTranslation();
-  const [ready, setReady] = useState(false);
-
   const [mode, setMode] = useState<'light' | 'dark'>(
     (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
   );
+  const [allMovies, setAllMovies] = useState<Movie[]>(defaultMovies);
 
   const theme = getTheme(mode);
 
@@ -27,31 +33,26 @@ const App: React.FC = () => {
     localStorage.setItem('theme', newMode);
   };
 
-  useEffect(() => {
-    i18n.changeLanguage(navigator.language).then(() => {
-      setReady(true);
-    });
-  }, [i18n]);
-
-  if (!ready) return null;
-
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box sx={{ position: 'relative', minHeight: '100vh' }}>
-        {/* Top-left controls: Language Selector + Theme Toggle */}
-        <Box sx={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 2, zIndex: 1000 }}>
+    <FavoritesProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box sx={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 1, zIndex: 1000 }}>
+          <BackButton />
           <LanguageSelector />
           <ThemeToggle mode={mode} toggleTheme={toggleTheme} />
+          <ShowFavorites />
+          
         </Box>
 
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search" element={<SearchPage setAllMovies={setAllMovies} />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/favorites" element={<FavoritesPage allMovies={allMovies} />} />
         </Routes>
-      </Box>
-    </ThemeProvider>
+      </ThemeProvider>
+    </FavoritesProvider>
   );
 };
 

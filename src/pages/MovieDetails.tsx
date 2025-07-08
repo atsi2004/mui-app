@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Typography, Container, Chip, CircularProgress, Button } from '@mui/material';
+import { Box, Typography, Container, Chip, CircularProgress, Button, IconButton } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import LaunchIcon from '@mui/icons-material/Launch';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShowFavorites from '../components/ShowFavorites';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
+import type { Movie } from '../data/Movie';
+import { useFavorites } from '../context/FavoritesContext';
 
 interface MovieDetailsData { // Details that will be shown
     Title: string;
@@ -28,6 +34,7 @@ const MovieDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [movie, setMovie] = useState<MovieDetailsData | null>(null);
     const [loading, setLoading] = useState(true);
+    const { isFavorite, toggleFavorite } = useFavorites();
 
     useEffect(() => {
         const fetchMovie = async () => {
@@ -49,7 +56,7 @@ const MovieDetails: React.FC = () => {
 
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
+        <Container maxWidth="md" sx={{ mt: 4, pt: 10 }}>
             <Typography variant="h3" gutterBottom>{movie.Title}</Typography>
             <Typography variant="subtitle1" gutterBottom>
                 {movie.Runtime} • {movie.Released}
@@ -96,6 +103,21 @@ const MovieDetails: React.FC = () => {
                     startIcon={<LaunchIcon />}>
                     Open on IMDb
                 </Button>
+
+                <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleFavorite(movie.imdbID);
+                        }}
+                        color="error"
+                        sx={{
+                          right: -10,
+                          bgcolor: 'background.paper',
+                        }}
+                      >
+                        {isFavorite(movie.imdbID) ? <Favorite /> : <FavoriteBorder />}
+                      </IconButton>
+                
             </Box>
             <Typography variant="h6" mt={3}>Ratings</Typography>
             <Typography>IMDb: {movie.imdbRating}/10</Typography>

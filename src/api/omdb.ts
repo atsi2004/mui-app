@@ -1,29 +1,23 @@
 import type { Movie } from '../data/Movie';
 
-const API_KEY = '857f82a9';
+const API_KEY = '857f82a9'; // or your own API key
 
-export const getMovies = async (query: string, page: number = 1): Promise<{
-  movies: Movie[];
-  totalResults: number;
-}> => {
-  const url = `https://www.omdbapi.com/?s=${query}&page=${page}&type=movie&apikey=${API_KEY}`;
-  const response = await fetch(url);
-  const movieJSON = await response.json();
+export const getMovies = async (
+  query: string,
+  page = 1,
+  year = '',
+  type = ''
+): Promise<{ movies: Movie[]; totalResults: number }> => {
+  let url = `https://www.omdbapi.com/?s=${encodeURIComponent(query)}&page=${page}&apikey=${API_KEY}&plot=full`;
 
-  if (movieJSON.Response === "True") {
-    return {
-      movies: movieJSON.Search,
-      totalResults: Number(movieJSON.totalResults),
-    };
-  } else {
-    throw new Error("No movies found");
-  }
+  if (year) url += `&y=${year}`;
+  if (type) url += `&type=${type}`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  return {
+    movies: data.Search || [],
+    totalResults: parseInt(data.totalResults) || 0,
+  };
 };
-
-export const getMovieById = async (id: string) => {
-  const API_KEY = '857f82a9';
-  const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${id}&plot=full`);
-  const data = await response.json();
-  return data;
-};
-

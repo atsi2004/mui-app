@@ -17,7 +17,13 @@ i18n.use(initReactI18next).init({
         loading: "Loading...",
         error: "An error occurred. Please try again.",
         movieSearch: "Movie Search",
-        searchLabel: "Movie Title"
+        searchLabel: "Movie Title",
+        year: "Year",
+        type: "Type",
+        all: "All",
+        movie: "Movie",
+        series: "Series",
+        episode: "Episode"
       }
 
     },
@@ -31,7 +37,13 @@ i18n.use(initReactI18next).init({
         loading: "Carregando...",
         error: "Ocorreu um erro. Por favor, tente novamente.",
         movieSearch: "Pesquisa de Filmes",
-        searchLabel: "Título do Filme"
+        searchLabel: "Título do Filme",
+        year: "Ano",
+        type: "Tipo",
+        all: "Todos",
+        movie: "Filme",
+        series: "Série",
+        episode: "Episódio"
       }
     },
     es: {
@@ -44,7 +56,14 @@ i18n.use(initReactI18next).init({
         loading: "Cargando...",
         error: "Ocurrió un error. Por favor, inténtalo de nuevo.",
         movieSearch: "Búsqueda de Películas",
-        searchLabel: "Título de la Película"
+        searchLabel: "Título de la Película",
+        year: "Año",
+        type: "Tipo",
+        all: "Todos",
+        movie: "Película",
+        series: "Serie",
+        episode: "Episodio"
+
       }
     },
     hi: {
@@ -57,7 +76,13 @@ i18n.use(initReactI18next).init({
         loading: "लोड हो रहा है...",
         error: "एक त्रुटि हुई। कृपया फिर से प्रयास करें।",
         movieSearch: "फ़िल्म खोज",
-        searchLabel: "फ़िल्म शीर्षक"
+        searchLabel: "फ़िल्म शीर्षक",
+        year: "वर्ष",
+        type: "प्रकार",
+        all: "सभी",
+        movie: "फिल्म",
+        series: "श्रृंखला",
+        episode: "कड़ी"
       }
     }
   }
