@@ -1,7 +1,6 @@
 import React from 'react';
 import { IconButton, Tooltip } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   movieId: string;
