@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 import Home from './pages/Home';
 import SearchPage from './pages/SearchPage';
@@ -19,7 +18,6 @@ import BackButton from './components/BackButton';
 import type { Movie } from './data/Movie';
 
 const App: React.FC = () => {
-  const { i18n } = useTranslation();
   const [mode, setMode] = useState<'light' | 'dark'>(
     (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
   );
